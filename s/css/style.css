@@ -1,0 +1,706 @@
+ *{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+ 
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden; /* importante para el botón que escapa: que no aparezca scroll */
+}
+ 
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url('/assets/fondo.jpg');
+  background-size: cover;       /* la imagen cubre toda la pantalla, sin deformarse */
+  background-position: center;  /* centrada */
+  background-repeat: no-repeat;
+}
+ 
+#game-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+ 
+#level-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 4vh;
+  gap: 1.5rem;
+  width: 100%;
+  height: 100%;
+}
+ 
+#question-text {
+  font-size: 2rem;
+  text-align: center;
+}
+
+/* ====== TÍTULOS POR NIVEL, EN ORDEN DE JUEGO ====== */
+ 
+/* Nivel 1 - "¿Te gustaría tener una salida?" (botón que escapa) */
+.titulo-escape-button {
+  font-size: 4rem;
+  font-weight: bold;
+  position: relative;
+  top: 180px;
+  left: 0px;
+}
+ 
+/* Nivel 2 - "¿Con quién?" (dropdown) */
+.titulo-dropdown-select {
+  font-size: 2rem;
+  font-weight: bold;
+  position: relative;
+  top: 150px;
+  left: 0px;
+}
+ 
+/* Nivel 3 - "¿A dónde te gustaría ir?" (mapa) */
+.titulo-map-select {
+  font-size: 2rem;
+  font-weight: bold;
+  position: relative;
+  top: 0px;
+  left: 0px;
+}
+ 
+/* Nivel 4 - "¿Cuánto tiempo te gustaría ir?" (ruleta) */
+.titulo-double-slot {
+  font-size: 2rem;
+  font-weight: bold;
+  position: relative;
+  top: 130px;
+  left: -10px;
+}
+ 
+/* Nivel 5 - "¿Cuándo querés ir?" (tarjetas de fecha) */
+.titulo-date-cards {
+  font-size: 2rem;
+  font-weight: bold;
+  position: relative;
+  top: 150px;
+  left: 0px;
+}
+ 
+/* Nivel 6 - "¿Qué vamos a hacer?" (sopa de letras) */
+.titulo-word-search {
+  font-size: 2rem;
+  font-weight: bold;
+  position: relative;
+  top: 0px;
+  left: 0px;
+}
+ 
+/* Nivel 7a - "¿Qué hay para comer?" (ahorcado) */
+.titulo-hangman-chain {
+  font-size: 2rem;
+  font-weight: bold;
+  position: relative;
+  top: 125px;
+  left: 0px;
+}
+ 
+/* Nivel 7b - "¿Qué hay para comer?" (adivinanza) */
+.titulo-riddle-clues {
+  font-size: 2rem;
+  font-weight: bold;
+  position: relative;
+  top: 115px;
+  left: 0px;
+}
+ 
+/* Nivel 8 - Final (texto largo + botón que se transforma) */
+.titulo-transform-button {
+  font-size: 2rem;
+  font-weight: bold;
+  position: relative;
+  top: 80px;
+  left: 0px;
+}
+
+#minigame-area {
+  position: relative;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+ 
+/* Botones genéricos de respuesta */
+.answer-btn {
+  font-size: 1.3rem;
+  padding: 0.8rem 2rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #ddd;
+}
+ 
+#btn-si {
+  background-color: #4CAF50;
+  color: white;
+  position: relative;
+  top: 0px;
+  left: -100px;   /* lo aleja del No, por ejemplo */
+}
+ 
+#btn-no {
+  position: absolute;
+  background-color: #e74c3c;
+  color: white;
+  /* la posición exacta se controla por JS */
+  transition: left 0.3s ease-out, top 0.3s ease-out;
+}
+ 
+/* Pantalla de transición */
+#transition-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+ 
+#transition-screen h2 {
+  font-size: 2.2rem;
+}
+ 
+#next-level-btn {
+  font-size: 1.2rem;
+  padding: 0.8rem 2rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #3498db;
+  color: white;
+  cursor: pointer;
+}
+ 
+.hidden {
+  display: none !important;
+}
+ 
+/* Mini-juego: dropdown de personas */
+.dropdown-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  top: 115px;
+  left: 0px;
+}
+ 
+.dropdown-container select {
+  font-size: 1.2rem;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  min-width: 220px;
+  cursor: pointer;
+  position: relative;
+  top:-50px;
+  left: 0px;
+}
+ 
+#btn-aceptar {
+  font-size: 1.2rem;
+  padding: 0.7rem 2rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #3498db;
+  color: white;
+  cursor: pointer;
+}
+ 
+#error-message {
+  color: #e74c3c;
+  font-size: 1.1rem;
+  min-height: 1.5rem;
+}
+ 
+/* Pantalla de "¡Correcto!" propia de este mini-juego */
+.correct-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  height: 100%;
+  text-align: center;
+}
+ 
+.correct-screen h2 {
+  font-size: 2.2rem;
+  color: #27ae60;
+}
+ 
+/* Mini-juego: mapa */
+.map-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+ 
+.map-wrapper img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+ 
+.map-pin {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 50% 50% 50% 0;
+  transform: translate(-50%, -100%) rotate(-45deg);
+  transition: left 1.2s ease-in-out, top 1.2s ease-in-out;
+}
+ 
+.map-pin.pin-elegido {
+  background-color: #3498db;
+  border: 2px solid white;
+}
+ 
+.map-pin.pin-destino {
+  background-color: #e74c3c;
+  border: 2px solid white;
+}
+ 
+#btn-aceptar-mapa {
+  font-size: 1.2rem;
+  padding: 0.7rem 2rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #3498db;
+  color: white;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+ 
+.destino-texto {
+  position: absolute;
+  bottom: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #27ae60;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 0.5rem 1.5rem;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+ 
+/* Mini-juego: ruleta doble */
+.ruleta-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+ 
+.ruletas-wrapper {
+  display: flex;
+  gap: 2rem;
+}
+ 
+.ruleta-columna {
+  position: relative;
+  width: 160px;
+  height: 120px;
+  overflow: hidden;
+  border: 3px solid #333;
+  border-radius: 10px;
+  background-color: white;
+}
+ 
+/* Marcador central que indica cuál es el valor "elegido" */
+.ruleta-columna::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 56px;
+  transform: translateY(-50%);
+  border-top: 2px solid #3498db;
+  border-bottom: 2px solid #3498db;
+  background-color: rgba(52, 152, 219, 0.1);
+  pointer-events: none;
+  z-index: 2;
+}
+ 
+.ruleta-tira {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: -28px; /* la mitad de la altura de un .ruleta-item (56px / 2), para centrar el ítem activo */
+}
+ 
+.ruleta-item {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #333;
+}
+ 
+#btn-girar-ruleta {
+  font-size: 1.3rem;
+  padding: 0.8rem 2.5rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #3498db;
+  color: white;
+  cursor: pointer;
+}
+ 
+#btn-girar-ruleta:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+ 
+.resultado-ruleta-texto {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #27ae60;
+}
+ 
+/* Mini-juego: tarjetas de fecha */
+.fechas-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+ 
+.fechas-tarjetas {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+ 
+.fecha-tarjeta {
+  padding: 1.5rem 2rem;
+  border: 3px solid #ccc;
+  border-radius: 12px;
+  background-color: white;
+  font-size: 1.2rem;
+  text-align: center;
+  cursor: pointer;
+  min-width: 160px;
+  transition: border-color 0.2s, background-color 0.2s, transform 0.15s;
+}
+ 
+.fecha-tarjeta:hover {
+  border-color: #3498db;
+  transform: translateY(-3px);
+}
+ 
+.fecha-tarjeta.seleccionada {
+  border-color: #3498db;
+  background-color: rgba(52, 152, 219, 0.12);
+}
+ 
+#btn-aceptar-fecha {
+  font-size: 1.2rem;
+  padding: 0.7rem 2rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #3498db;
+  color: white;
+  cursor: pointer;
+}
+ 
+/* Mini-juego: sopa de letras */
+.sopa-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+ 
+.sopa-contador {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #3498db;
+}
+ 
+.sopa-resumen-largos {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+ 
+.sopa-linea-largo {
+  font-size: 1rem;
+  color: #555;
+}
+ 
+.sopa-linea-largo.tachado {
+  text-decoration: line-through;
+  color: #aaa;
+}
+ 
+.sopa-grid {
+  display: grid;
+  gap: 2px;
+  user-select: none;
+  touch-action: none;
+}
+ 
+.sopa-celda {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: bold;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #333;
+}
+ 
+.sopa-celda.seleccionando {
+  background-color: rgba(52, 152, 219, 0.35);
+}
+ 
+.sopa-celda.encontrada {
+  background-color: rgba(39, 174, 96, 0.45);
+  color: #1e7e45;
+}
+ 
+/* Pantalla de resumen final del nivel de sopa de letras */
+.resumen-actividades {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+}
+ 
+.resumen-actividades h2 {
+  font-size: 1.8rem;
+  color: #27ae60;
+}
+ 
+.resumen-actividades ul {
+  list-style: none;
+  font-size: 1.3rem;
+  line-height: 1.8;
+}
+ 
+/* Mini-juego: ahorcado */
+.ahorcado-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+ 
+.ahorcado-pregunta {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #333;
+}
+ 
+.ahorcado-dibujo {
+  width: 160px;
+  height: 180px;
+}
+ 
+.ahorcado-dibujo line,
+.ahorcado-dibujo circle {
+  stroke: #333;
+  stroke-width: 4;
+  fill: none;
+  stroke-linecap: round;
+}
+ 
+.ahorcado-palabra {
+  display: flex;
+  gap: 0.6rem;
+}
+ 
+.ahorcado-letra-casillero {
+  width: 36px;
+  height: 44px;
+  border-bottom: 3px solid #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+ 
+.ahorcado-espacio {
+  width: 20px;
+  height: 44px;
+}
+ 
+.ahorcado-intentos {
+  font-size: 1.1rem;
+  color: #e74c3c;
+}
+ 
+.ahorcado-mensaje-bien {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #27ae60;
+}
+ 
+/* Mini-juego: adivinanza con pistas */
+.adivinanza-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  max-width: 500px;
+}
+ 
+.adivinanza-pista {
+  font-size: 1.3rem;
+  text-align: center;
+  color: #333;
+  background-color: white;
+  border: 2px solid #3498db;
+  border-radius: 10px;
+  padding: 1rem 1.5rem;
+}
+ 
+.adivinanza-input-row {
+  display: flex;
+  gap: 0.8rem;
+}
+ 
+#adivinanza-input {
+  font-size: 1.2rem;
+  padding: 0.6rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  text-align: center;
+}
+ 
+#btn-adivinanza-aceptar {
+  font-size: 1.2rem;
+  padding: 0.6rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #3498db;
+  color: white;
+  cursor: pointer;
+}
+ 
+.adivinanza-error {
+  color: #e74c3c;
+  font-size: 1rem;
+  min-height: 1.5rem;
+}
+ 
+.adivinanza-correcto {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #27ae60;
+}
+ 
+/* Mini-juego: transformación final (texto largo + botón que cambia) */
+.texto-largo-final {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  max-width: 700px;
+  text-align: left;
+  overflow-y: auto;
+  max-height: 45vh;
+  padding: 0 1rem;
+  white-space: pre-line;
+}
+ 
+.aviso-cerrar-pagina {
+  font-size: 0.95rem;
+  color: #777;
+  text-align: center;
+  white-space: pre-line;
+}
+ 
+/* Pantalla de bienvenida */
+#welcome-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  padding: 0 1.5rem;
+}
+ 
+#welcome-title {
+  font-size: 2.4rem;
+  font-weight: bold;
+  color: #333;
+}
+ 
+#btn-empezar {
+  font-size: 1.3rem;
+  padding: 0.9rem 2.5rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #3498db;
+  color: white;
+  cursor: pointer;
+}
+ 
+/* Pantalla final ("¡Felicidades, te vas del...!") - siempre centrada,
+   independiente de level-screen, sin depender de clases dinámicas */
+#final-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+ 
+#final-text {
+  font-size: 3rem;
+  text-align: center;
+  padding: 0 1.5rem;
+}
