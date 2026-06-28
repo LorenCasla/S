@@ -15,7 +15,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: url('/assets/fondo.jpg');
+  background-image: url(/assets/fondo.jpg');
   background-size: cover;       /* la imagen cubre toda la pantalla, sin deformarse */
   background-position: center;  /* centrada */
   background-repeat: no-repeat;
