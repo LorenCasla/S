@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Juego de Preguntas</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div id="game-container">
+
+    <!-- Pantalla de bienvenida: aparece primero, antes que cualquier nivel -->
+    <div id="welcome-screen">
+      <h1 id="welcome-title">Bienvenida a Juegarci</h1>
+      <img id="welcome-image" src="assets/aaa.jpeg" alt="Imagen de bienvenida">
+      <button id="btn-empezar">Empezar</button>
+    </div>
+
+    <!-- Aquí se va a renderizar la pregunta y el mini-juego actual -->
+    <div id="level-screen" class="hidden">
+      <h2 id="question-text"></h2>
+      <div id="minigame-area"></div>
+    </div>
+
+    <!-- Pantalla final: aparece sola cuando se terminan todos los niveles -->
+    <div id="final-screen" class="hidden">
+      <p id="final-text"></p>
+    </div>
+
+  </div>
+
+  <script src="js/levels.js"></script>
+  <script src="js/minigame-escape.js"></script>
+  <script src="js/minigame-dropdown.js"></script>
+  <script src="js/minigame-map.js"></script>
+  <script src="js/minigame-slot.js"></script>
+  <script src="js/minigame-datecards.js"></script>
+  <script src="js/minigame-wordsearch.js"></script>
+  <script src="js/minigame-hangman.js"></script>
+  <script src="js/minigame-riddle.js"></script>
+  <script src="js/minigame-transform.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
